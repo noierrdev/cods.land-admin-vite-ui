@@ -121,6 +121,12 @@ function createData(name, calories, fat) {
 
 
 export default function MyDataTable(props) {
+  const {
+    onFetchData=()=>{},
+    pagedata=null,
+    headers=[],
+    total=0,
+  }=props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -138,7 +144,7 @@ export default function MyDataTable(props) {
   };
 
   React.useEffect(()=>{
-        props.onFetchData(page,rowsPerPage)
+        onFetchData(page,rowsPerPage)
   },[page,rowsPerPage])
 
   return (
@@ -146,15 +152,15 @@ export default function MyDataTable(props) {
       <Table size='small' sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
           <TableRow >
-            {props.headers&&props.headers.map((header,index)=>{
+            {headers&&headers.map((header,index)=>{
               return (<StyledTableCell align='left' key={index} >{header.title}</StyledTableCell>)
             })}
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.pagedata&&props.pagedata.map((row,index) => (
+          {pagedata&&pagedata.map((row,index) => (
             <TableRow hover selected key={index}>
-              {props.headers.map((header,index)=>{
+              {headers.map((header,index)=>{
                 if(header.tooltip) return (
                   <TableCell align='left' key={index} >
                     <Tooltip title={<div dangerouslySetInnerHTML={{ __html: header.tooltip(row) }} ></div>} >
@@ -182,9 +188,9 @@ export default function MyDataTable(props) {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
-              count={props.total?props.total:10}
+              count={total?total:10}
               rowsPerPage={rowsPerPage}
-              page={props.page?props.page:page}
+              page={page?page:page}
               
               
               onPageChange={handleChangePage}
@@ -198,11 +204,4 @@ export default function MyDataTable(props) {
       </Table>
     </TableContainer>
   );
-}
-MyDataTable.defaultProps={
-  onFetchData:()=>{
-
-  },
-  pagedata:[],
-  headers:[]
 }

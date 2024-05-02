@@ -8,19 +8,26 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {CheckOutlined, CloseOutlined} from '@mui/icons-material'
 
 export default function Confirm(props) {
+  const {
+    open=true,
+    onConfirm=()=>{},
+    onCancel=()=>{},
+    onOk=()=>{},
+    text="Do you want to continue selected action?"
+  }=props;
 
   const handleClose = () => {
-    props.onCancel();
+    onCancel();
   };
 
   const handleOk=()=>{
-    props.onOk();
-    props.onCancel()
+    onOk();
+    onCancel()
   }
 
   return (
       <Dialog
-        open={props.open}
+        open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -30,7 +37,7 @@ export default function Confirm(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {props.text}
+            {text}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -41,11 +48,4 @@ export default function Confirm(props) {
         </DialogActions>
       </Dialog>
   );
-}
-Confirm.defaultProps={
-    open:true,
-    onConfirm:()=>{},
-    onCancel:()=>{},
-    onOk:()=>{},
-    text:"Do you want to continue selected action?"
 }
