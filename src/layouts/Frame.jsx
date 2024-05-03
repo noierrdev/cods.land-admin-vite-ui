@@ -188,6 +188,15 @@ export default function FrameLayout(props) {
                         </ListItemButton>
                     )}
                 </ListItem>
+                <ListItem disablePadding>
+                    {pathname==('/admin/appointments')?(
+                        <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Appointments</Fab>
+                    ):(
+                        <ListItemButton onClick={e=>navigate('/admin/appointments')} >
+                            <ListItemText style={{textAlign:"center"}} primary={`Appointments`} />
+                        </ListItemButton>
+                    )}
+                </ListItem>
                 {/* <ListItem disablePadding>
                     {pathname==('/admin/newsletters')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Newsletters</Fab>
