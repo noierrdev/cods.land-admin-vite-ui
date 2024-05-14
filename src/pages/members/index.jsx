@@ -66,6 +66,7 @@ const AdminMembersPage=props=>{
                 fullWidth
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                open={false}
             >
                 <DialogTitle>
                     

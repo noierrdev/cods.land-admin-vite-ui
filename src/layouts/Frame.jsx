@@ -1,7 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
+// import AppBar from '@mui/material/AppBar';
+import { styled, useTheme } from '@mui/material/styles';
+import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -17,14 +19,72 @@ import MenuItem from '@mui/material/MenuItem';
 import { Outlet } from 'react-router-dom';
 import Logo from '../assets/images/logo.png'
 import {useNavigate,useLocation} from 'react-router-dom'
-import { Avatar, Fab } from '@mui/material';
+import { Avatar, Fab, IconButton } from '@mui/material';
 import { BACKEND_URL } from '../AppConfigs';
 import { useDispatch, useSelector } from 'react-redux';
 import {signout} from '../store/reducers/auth.reducer'
-
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const drawerWidth = 240;
 
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: `-${drawerWidth}px`,
+      ...(open && {
+        transition: theme.transitions.create('margin', {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+      }),
+    }),
+  );
+  
+  const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+  })(({ theme, open }) => ({
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: `${drawerWidth}px`,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
+  
+  const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  }));
+
 export default function FrameLayout(props) {
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(false);
+
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
     const dispatch=useDispatch();
     const navigate=useNavigate()
     const {pathname}=useLocation();
@@ -46,12 +106,22 @@ export default function FrameLayout(props) {
         setAnchorEl(null);
     };
     return (
-        <Box sx={{ display: 'flex' }}>
+        <>
         <AppBar
+        color='default'
             position="fixed"
-            sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+            // sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
         >
             <Toolbar  sx={{backgroundColor:"white"}} >
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                >
+                    <MenuIcon />
+                </IconButton>
                 <div style={{flexGrow:1}} ></div>
                 {authData&&<>
                 <Avatar onMouseOver={handleMenu} sx={{margin:1}} src={`${BACKEND_URL}/auth/avatars/${authData.email}`} ></Avatar>
@@ -81,20 +151,27 @@ export default function FrameLayout(props) {
             </Menu>
         </AppBar>
         <Drawer
+            
             sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
                 width: drawerWidth,
-                boxSizing: 'border-box',
-                backgroundColor:"#2E3192",
-                color:"white"
-            },
-            }}
-            variant="permanent"
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                  width: drawerWidth,
+                  boxSizing: 'border-box',
+                  backgroundColor:"#2E3192",
+                  color:"white"
+                },
+                
+              }}
+            variant="persistent"
             anchor="left"
-        >
-            <Toolbar />
+            open={open}
+            >
+            <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{color:"white"}} /> : <ChevronRightIcon sx={{color:"white"}} />}
+            </IconButton>
+            </DrawerHeader>
             <img src={Logo} style={{width:"40%",marginLeft:"auto",marginRight:"auto"}} />
             <List  >
                 {/* <ListItem disablePadding>
@@ -224,6 +301,6 @@ export default function FrameLayout(props) {
             <Toolbar />
             <Outlet {...props} />
         </Box>
-        </Box>
+        </>
     );
 }
