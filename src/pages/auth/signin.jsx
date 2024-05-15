@@ -51,7 +51,7 @@ export default function SignIn() {
       })
       .then(response=>{
         if(response.data.status==="success"){
-          snackbar.enqueueSnackbar("Login Successfully",{variant:"success"})
+          snackbar.enqueueSnackbar("Login Successfully",{variant:"success",autoHideDuration:1000})
           dispatch(authSuccess(response.data.data))
           sessionStorage.setItem('token',response.data.data.token)
           navigate('/')

@@ -5,9 +5,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios';
 import { BACKEND_URL } from '../../AppConfigs';
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from '@mui/material';
-import { CalendarMonth, Email, GpsFixed, GpsNotFixed, LocationCity, LocationOn, Note, Person, Phone, PhoneOutlined } from '@mui/icons-material';
+import { Block, CalendarMonth, Check, Email, GpsFixed, GpsNotFixed, LocationCity, LocationOn, LockClock, Note, Person, Phone, PhoneOutlined, TimeToLeave, Timelapse, Timer, TimerOutlined } from '@mui/icons-material';
+import { useSnackbar } from 'notistack';
 const localizer = momentLocalizer(moment)
 const AppointmentsPage=props=>{
+    const snackbar=useSnackbar();
     const [Events,setEvents]=React.useState([]);
     const [ViewEvent,setViewEvent]=React.useState(null);
     const viewEvent=(event)=>{
@@ -74,13 +76,55 @@ const AppointmentsPage=props=>{
                     events_list.push({
                         start:fromDate,
                         end:toDate,
-                        title:`${event.user.fullname} ${fromTime}-${toTime}`,
+                        title:<div title="" style={{display:"flex",alignItems:"center",backgroundColor:"white",color:"black"}} >{event.user.fullname} {fromTime}-{toTime} {event.accepted?<Check color='primary' />:<TimerOutlined color='secondary' />}</div>,
                         resource:event
                     })
                 });
                 setEvents([
                     ...events_list,
                 ])
+            }
+        })
+    }
+    const acceptAppointment=()=>{
+        if(!ViewEvent) return;
+        return axios.put(`${BACKEND_URL}/appointments/${ViewEvent._id}/accept`,{},{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            if(response.data.status=="success"){
+                setViewEvent({...ViewEvent,accepted:true,status:"accepted"});
+                snackbar.enqueueSnackbar("Appointment is accepted!",{variant:"success",autoHideDuration:1000})
+                const date=new Date();
+                const year=date.getFullYear();
+                const month=date.getMonth();
+                const start_month=new Date(year,month,1);
+                const nextMonthFirstDay = new Date(year, month + 1, 1);
+                const end_month=new Date(nextMonthFirstDay.getTime()-1);
+                getEvents({start:start_month,end:end_month});
+            }
+        })
+    }
+    const cancelAppointment=()=>{
+        if(!ViewEvent) return;
+        return axios.put(`${BACKEND_URL}/appointments/${ViewEvent._id}/cancel`,{},{
+            headers:{
+                token:sessionStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            if(response.data.status=="success"){
+                setViewEvent({...ViewEvent,accepted:false,status:"canceled"});
+                snackbar.enqueueSnackbar("Appointment is canceled!",{variant:"warning",autoHideDuration:1000})
+                const date=new Date();
+                const year=date.getFullYear();
+                const month=date.getMonth();
+                const start_month=new Date(year,month,1);
+                const nextMonthFirstDay = new Date(year, month + 1, 1);
+                const end_month=new Date(nextMonthFirstDay.getTime()-1);
+                getEvents({start:start_month,end:end_month});
             }
         })
     }
@@ -133,6 +177,18 @@ const AppointmentsPage=props=>{
                 
             </DialogContent>
             <DialogActions>
+                {
+                    ViewEvent&&ViewEvent.accepted?(
+                        <Button onClick={cancelAppointment} variant='contained' color='secondary' >
+                            <Block/>Cancel
+                        </Button>
+                    ):(
+                        <Button onClick={acceptAppointment} variant='contained' >
+                            <Check/> Accept
+                        </Button>
+                    )
+                }
+                
                 <Button
                 variant='outlined'
                 onClick={e=>setViewEvent(null)}
