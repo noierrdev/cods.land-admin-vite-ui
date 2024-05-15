@@ -123,7 +123,7 @@ const AppointmentsPage=props=>{
                     <Phone/><Typography>Phone : {ViewEvent&&(ViewEvent.user.phonenumber)}</Typography>
                 </div>
                 <div style={{display:"flex",alignItems:'center',marginTop:10}} >
-                    <LocationOn/><Typography>Location : {ViewEvent&&(ViewEvent.location)}</Typography>
+                    <LocationOn/><Typography>Address : {ViewEvent&&(ViewEvent.address)}</Typography>
                 </div>
                 <Divider/>
                 <div style={{display:"flex",alignItems:'center',marginTop:10}} >
