@@ -105,6 +105,11 @@ export default function FrameLayout(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const toNavigate=(url)=>{
+        handleDrawerClose()
+        navigate(url);
+    }
     return (
         <>
         <AppBar
@@ -178,7 +183,7 @@ export default function FrameLayout(props) {
                     {pathname.indexOf('/dashboard')==0?(
                         <Fab style={{width:"100%"}} variant='extended' >Dashboard</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/dashboard')} >
+                        <ListItemButton onClick={e=>toNavigate('/dashboard')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Dashboard`} />
                         </ListItemButton>
                     )}
@@ -187,7 +192,7 @@ export default function FrameLayout(props) {
                     {pathname.indexOf('/users')==0?(
                         <Fab style={{width:"100%"}} variant='extended' >Users</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/users')} >
+                        <ListItemButton onClick={e=>toNavigate('/users')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Users`} />
                         </ListItemButton>
                     )}
@@ -196,7 +201,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/products/categories')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Categories</Fab>
                     ):(
-                        <ListItemButton  onClick={e=>navigate('/admin/products/categories')} >
+                        <ListItemButton  onClick={e=>toNavigate('/admin/products/categories')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Categories`} />
                         </ListItemButton>
                         // <Fab color='primary' style={{width:"100%"}} variant='extended' >Categories</Fab>
@@ -206,7 +211,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/products')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Products</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/products')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/products')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Products`} />
                         </ListItemButton>
                     )}
@@ -215,7 +220,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/orders')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Orders</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/orders')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/orders')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Orders`} />
                         </ListItemButton>
                     )}
@@ -224,7 +229,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/users')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Users</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/users')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/users')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Users`} />
                         </ListItemButton>
                     )}
@@ -233,7 +238,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/posts')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Posts</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/posts')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/posts')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Posts`} />
                         </ListItemButton>
                     )}
@@ -242,7 +247,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/members')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Members</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/members')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/members')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Members`} />
                         </ListItemButton>
                     )}
@@ -251,7 +256,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/events')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Events</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/events')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/events')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Events`} />
                         </ListItemButton>
                     )}
@@ -260,7 +265,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/subscribers')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Subscribers</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/subscribers')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/subscribers')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Subscribers`} />
                         </ListItemButton>
                     )}
@@ -269,7 +274,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/appointments')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Appointments</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/appointments')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/appointments')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Appointments`} />
                         </ListItemButton>
                     )}
@@ -278,7 +283,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/newsletters')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Newsletters</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/newsletters')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/newsletters')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Newsletters`} />
                         </ListItemButton>
                     )}
@@ -287,7 +292,7 @@ export default function FrameLayout(props) {
                     {pathname==('/admin/posts/categories')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Post Categories</Fab>
                     ):(
-                        <ListItemButton onClick={e=>navigate('/admin/posts/categories')} >
+                        <ListItemButton onClick={e=>toNavigate('/admin/posts/categories')} >
                             <ListItemText style={{textAlign:"center"}} primary={`Post Categories`} />
                         </ListItemButton>
                     )}

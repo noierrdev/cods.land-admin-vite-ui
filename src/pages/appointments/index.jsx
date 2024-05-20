@@ -4,9 +4,10 @@ import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from 'axios';
 import { BACKEND_URL } from '../../AppConfigs';
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from '@mui/material';
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Fab, Typography } from '@mui/material';
 import { Block, CalendarMonth, Check, Email, GpsFixed, GpsNotFixed, LocationCity, LocationOn, LockClock, Note, Person, Phone, PhoneOutlined, TimeToLeave, Timelapse, Timer, TimerOutlined } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
+import { Link } from 'react-router-dom'
 const localizer = momentLocalizer(moment)
 const AppointmentsPage=props=>{
     const snackbar=useSnackbar();
@@ -130,6 +131,11 @@ const AppointmentsPage=props=>{
     }
     return (
         <>
+        {/* <Box margin={1} >
+            <Link to="/admin/appointments/" style={{margin:1}} ><Fab variant='extended' color='primary' >Calendar</Fab></Link>
+            <Link to="/admin/appointments/table" style={{margin:1}} ><Fab variant='extended' color='primary' >Table</Fab></Link>
+            <Link to="/admin/appointments/events" style={{margin:1}} ><Fab variant='extended' color='primary' >Events</Fab></Link>
+        </Box> */}
         <Calendar
         localizer={localizer}
         events={Events}

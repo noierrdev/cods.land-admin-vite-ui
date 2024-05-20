@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import {useNavigate, useRoutes, matchRoutes} from 'react-router-dom'
 import Loadable from './Loadable';
 import axios from 'axios'
 import { BACKEND_URL } from '../AppConfigs';
 import {useSelector,useDispatch} from 'react-redux'
 import {authSuccess} from '../store/reducers/auth.reducer'
+import FrameLayout from '../layouts/Frame';
 const AppRoutes = (props)=>{
     const dispatch=useDispatch()
     const navigate=useNavigate()
@@ -25,7 +26,7 @@ const AppRoutes = (props)=>{
         },
         {
             path:"/admin",
-            element:Loadable(React.lazy(()=>import('../layouts/Frame')))(props),
+            element:Loadable(lazy(()=>import("../layouts/Frame")))(props),
             children:[
                 {
                     path:"dashboard",
@@ -77,11 +78,21 @@ const AppRoutes = (props)=>{
                     auth:true,
                     element:Loadable(React.lazy(()=>import('../pages/subscribers')))(props),
                 },
-                {
-                    path:"appointments",
-                    auth:true,
-                    element:Loadable(React.lazy(()=>import('../pages/appointments')))(props),
-                },
+                // {
+                //     path:"appointments",
+                //     auth:true,
+                //     element:Loadable(React.lazy(()=>import('../pages/appointments')))(props),
+                // },
+                // {
+                //     path:"appointments/table",
+                //     auth:true,
+                //     element:Loadable(React.lazy(()=>import('../pages/appointments/datagrid')))(props),
+                // },
+                // {
+                //     path:"appointments/events",
+                //     auth:true,
+                //     element:Loadable(React.lazy(()=>import('../pages/appointments/events')))(props),
+                // },
             ]
         },
         {

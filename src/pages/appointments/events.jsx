@@ -1,23 +1,15 @@
-import { Divider, IconButton,Box, TextField, Typography ,Fab,Button, Tooltip,Paper, Grid,Avatar} from "@mui/material";
+import { Divider, IconButton,Box,} from "@mui/material";
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
 import { BACKEND_URL } from "../../AppConfigs";
 import { useSnackbar } from "notistack";
 import { BlockOutlined, CheckOutlined, DeleteOutlined,AddOutlined,ListOutlined,ImageOutlined, Check, Block, PunchClock, Timelapse, Timer, TimerOutlined } from "@mui/icons-material";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
+
 import Confirm from "../../components/general/Confirm";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import {Link} from 'react-router-dom'
+
 export default function(props){
     const [PageData,setPageData]=React.useState(null);
     const [DeleteAppointment, setDeleteAppointment]=React.useState(null);
@@ -81,12 +73,24 @@ export default function(props){
     }
     const headers=[
         {
-            title:"User",
+            title:"Title",
             component:(row)=><div>{row.user.fullname}</div>
         },
         {
-            title:"address",
+            title:"Address",
             component:row=><>{`${row.address}`}</>
+        },
+        {
+            title:"Start Date",
+            component:row=>{
+                const from=new Date(row.from_date);
+                const from_year=from.getFullYear();
+                const from_month=from.getMonth();
+                const from_day=from.getDate();
+                return (
+                    <div>{`${from_year}-${Number(from_month).toString().padStart(2,0)}-${Number(from_day).toString().padStart(2,0)}`}</div>
+                )
+            }
         },
         {
             title:"Date",
@@ -150,7 +154,6 @@ export default function(props){
                 <Link to="/admin/appointments/" style={{margin:1}} ><Fab variant='extended' color='primary' >Calendar</Fab></Link>
                 <Link to="/admin/appointments/table" style={{margin:1}} ><Fab variant='extended' color='primary' >Table</Fab></Link>
                 <Link to="/admin/appointments/events" style={{margin:1}} ><Fab variant='extended' color='primary' >Events</Fab></Link>
-                
             </Box> */}
             <MyDataTable pagedata={PageData&&PageData.pagedata} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumber} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} headers={headers} />
             <Confirm open={DeleteAppointment?true:false} onOk={e=>deleteAppointment(DeleteAppointment)} onCancel={e=>setDeleteAppointment(null)} />
