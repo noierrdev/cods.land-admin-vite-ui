@@ -26,7 +26,7 @@ const AppRoutes = (props)=>{
         },
         {
             path:"/admin",
-            element:Loadable(lazy(()=>import("../layouts/Frame")))(props),
+            element:<FrameLayout {...props} />,
             children:[
                 {
                     path:"dashboard",
@@ -78,21 +78,21 @@ const AppRoutes = (props)=>{
                     auth:true,
                     element:Loadable(React.lazy(()=>import('../pages/subscribers')))(props),
                 },
-                // {
-                //     path:"appointments",
-                //     auth:true,
-                //     element:Loadable(React.lazy(()=>import('../pages/appointments')))(props),
-                // },
-                // {
-                //     path:"appointments/table",
-                //     auth:true,
-                //     element:Loadable(React.lazy(()=>import('../pages/appointments/datagrid')))(props),
-                // },
-                // {
-                //     path:"appointments/events",
-                //     auth:true,
-                //     element:Loadable(React.lazy(()=>import('../pages/appointments/events')))(props),
-                // },
+                {
+                    path:"appointments",
+                    auth:true,
+                    element:Loadable(React.lazy(()=>import('../pages/appointments')))(props),
+                },
+                {
+                    path:"appointments/table",
+                    auth:true,
+                    element:Loadable(React.lazy(()=>import('../pages/appointments/datagrid')))(props),
+                },
+                {
+                    path:"appointments/events",
+                    auth:true,
+                    element:Loadable(React.lazy(()=>import('../pages/appointments/events')))(props),
+                },
             ]
         },
         {

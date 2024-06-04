@@ -68,6 +68,7 @@ function TablePaginationActions(props) {
   }
 
   return (
+    <>
     <Box sx={{ flexShrink: 0, ml: 2.5,display:"flex",alignItems:"center" }}>
       <IconButton
         onClick={handleFirstPageButtonClick}
@@ -104,7 +105,7 @@ function TablePaginationActions(props) {
         </div>
       </form>
     </Box>
-    
+    </>
   );
 }
 

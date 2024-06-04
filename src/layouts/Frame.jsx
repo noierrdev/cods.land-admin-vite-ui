@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 // import AppBar from '@mui/material/AppBar';
 import { styled, useTheme } from '@mui/material/styles';
@@ -252,7 +252,7 @@ export default function FrameLayout(props) {
                         </ListItemButton>
                     )}
                 </ListItem>
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                     {pathname==('/admin/events')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Events</Fab>
                     ):(
@@ -260,7 +260,7 @@ export default function FrameLayout(props) {
                             <ListItemText style={{textAlign:"center"}} primary={`Events`} />
                         </ListItemButton>
                     )}
-                </ListItem>
+                </ListItem> */}
                 <ListItem disablePadding>
                     {pathname==('/admin/subscribers')?(
                         <Fab style={{width:"90%",marginLeft:"auto",marginRight:"auto"}} variant='extended' >Subscribers</Fab>
@@ -299,13 +299,18 @@ export default function FrameLayout(props) {
                 </ListItem> */}
             </List>
         </Drawer>
-        <Box
+        {/* <Box
             component="main"
             sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        > */}
+        <div
+            component="main"
+            style={{ flexGrow: 1, width:"80%",marginLeft:"auto",marginRight:"auto",marginTop:"5vh",marginBottom:"5vh",bgcolor: 'background.default', p: 3 }}
         >
             <Toolbar />
             <Outlet {...props} />
-        </Box>
+        </div>
+        {/* </Box> */}
         </>
     );
 }

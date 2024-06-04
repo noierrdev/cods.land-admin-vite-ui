@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -64,8 +64,16 @@ export default function SignIn() {
   return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
+        {/* <Box
           sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        > */}
+          <div
+          style={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
@@ -78,7 +86,8 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {/* <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}> */}
+          <form component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -123,8 +132,10 @@ export default function SignIn() {
                 </Link> */}
               </Grid>
             </Grid>
-          </Box>
-        </Box>
+          {/* </Box> */}
+        {/* </Box> */}
+        </form>
+        </div>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
   );

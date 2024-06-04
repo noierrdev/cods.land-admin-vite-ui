@@ -1,10 +1,11 @@
-import { Divider, IconButton,Box, TextField, Typography ,Fab,Button, Tooltip,Paper, Grid,Avatar} from "@mui/material";
+import { Divider, IconButton, TextField, Typography ,Fab,Button, Tooltip,Paper, Grid,Avatar} from "@mui/material";
+// import Box from '@mui/material/Box'
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
 import axios from 'axios'
 import { BACKEND_URL } from "../../AppConfigs";
 import { useSnackbar } from "notistack";
-import { BlockOutlined, CheckOutlined, DeleteOutlined,AddOutlined,ListOutlined,ImageOutlined, Check, Block, PunchClock, Timelapse, Timer, TimerOutlined } from "@mui/icons-material";
+import { BlockOutlined, CheckOutlined, DeleteOutlined,AddOutlined,ListOutlined,ImageOutlined, Check, Block, PunchClock, Timelapse, Timer, TimerOutlined, CalendarMonth, TableBar, TableRows, Event } from "@mui/icons-material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -146,12 +147,15 @@ export default function(props){
     ]
     return (
         <>
-            {/* <Box margin={1} >
-                <Link to="/admin/appointments/" style={{margin:1}} ><Fab variant='extended' color='primary' >Calendar</Fab></Link>
-                <Link to="/admin/appointments/table" style={{margin:1}} ><Fab variant='extended' color='primary' >Table</Fab></Link>
-                <Link to="/admin/appointments/events" style={{margin:1}} ><Fab variant='extended' color='primary' >Events</Fab></Link>
-                
-            </Box> */}
+            {/* <Box margin={1} > */}
+            <Typography variant='h3' component={'h3'} >Appointments</Typography>
+            <div style={{margin:2}} >
+                <Link to="/admin/appointments/" style={{margin:2}} ><Fab variant='extended' color='primary' ><CalendarMonth/>Calendar</Fab></Link>
+                <Link to="/admin/appointments/table" style={{margin:2}} ><Fab variant='extended' color='primary' ><TableRows/>Table</Fab></Link>
+                <Link to="/admin/appointments/events" style={{margin:2}} ><Fab variant='extended' color='primary' ><Event/>Events</Fab></Link>
+            
+            </div>
+            {/* </Box> */}
             <MyDataTable pagedata={PageData&&PageData.pagedata} page={PageData&&PageData.page} pagesize={PageData&&PageData.pagesize} total={PageData&&PageData.totalNumber} onFetchData={(page,pagesize)=>getPageData(page,pagesize)} headers={headers} />
             <Confirm open={DeleteAppointment?true:false} onOk={e=>deleteAppointment(DeleteAppointment)} onCancel={e=>setDeleteAppointment(null)} />
         </>
