@@ -106,7 +106,6 @@ const AppointmentsPage=props=>{
                 setEvents([
                     ...events_list,
                 ])
-                console.log(backgroundEvents)
                 setBackgroundEvents([...backgroundEvents])
             }
         })
@@ -175,6 +174,7 @@ const AppointmentsPage=props=>{
         onRangeChange={getEvents}
         style={{ height: 800,marginTop:20 }}
         popup={true}
+        dayPropGetter={date =>{}}
         />
         <Dialog
         open={ViewEvent?true:false}
