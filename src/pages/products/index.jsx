@@ -1,6 +1,6 @@
 import React from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
-import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid } from "@mui/material";
+import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined, EditOutlined, Edit} from '@mui/icons-material'
@@ -28,6 +28,7 @@ const AdminProductsPage=props=>{
     const [DeleteAll,setDeleteAll]=React.useState(false);
     const [ShowProduct,setShowProduct]=React.useState(null);
     const [EditProduct,setEditProduct]=React.useState(null);
+    const [ProductImages,setProductImages]=React.useState([]);
     const snackbar=useSnackbar();
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
@@ -44,6 +45,7 @@ const AdminProductsPage=props=>{
     const refImage=React.useRef(null);
     const refCSV=React.useRef(null)
     const refSearch=React.useRef(null);
+    const refProductImage=React.useRef(null);
     const {search}=useLocation()
     const navigate=useNavigate()
     useAuth()
@@ -147,6 +149,10 @@ const AdminProductsPage=props=>{
         myForm.append('weight',refWeight.current.value);
         myForm.append('public',refPublic.current.checked);
         myForm.append('image',ProductImage);
+        ProductImages.map((oneProductImage,index)=>{
+            myForm.append("images",oneProductImage);
+        })
+        
         axios.post(`${BACKEND_URL}/shop/products`,myForm,{
             headers:{
                 token:sessionStorage.getItem('token')
@@ -163,6 +169,7 @@ const AdminProductsPage=props=>{
                 refHeight.current.value="";
                 refWeight.current.value="";
                 setProductImage(null)
+                setProductImages([])
                 getPageData(PageData.page,PageData.pagesize);
                 snackbar.enqueueSnackbar("Saved successfully",{variant:"success"})
             }
@@ -401,7 +408,21 @@ const AdminProductsPage=props=>{
                         </>
                     )}
                 </Paper>
+                <Button onClick={e=>refProductImage.current.click()} variant="contained" fullWidth sx={{marginTop:3,marginBottom:1}} >Add Image</Button>
+                <List>
+                    {ProductImages.map((oneProductImage,index)=>{
+                        return (
+                            <ListItem key={index}>
+                                <ListItemAvatar>
+                                    <Avatar src={window.URL.createObjectURL(oneProductImage)} variant="square" />
+                                </ListItemAvatar>
+                                <ListItemText primary={oneProductImage.name} secondary={`${(Number(oneProductImage.size)/1024).toFixed(2)} KB`} />
+                            </ListItem>
+                        )
+                    })}
+                </List>
                 <input hidden accept="image/*" onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
+                <input hidden accept="image/*" onChange={e=>setProductImages(ProductImages=>[...ProductImages,e.target.files[0]])} type="file" ref={refProductImage} />
                 </DialogContent>
                 <DialogActions>
                 <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
