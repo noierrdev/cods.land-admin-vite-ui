@@ -3,7 +3,7 @@ import MyDataTable from "../../components/datagrid/MyDataTable";
 import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
-import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined, EditOutlined, Edit} from '@mui/icons-material'
+import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined, EditOutlined, Edit, Delete} from '@mui/icons-material'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -128,6 +128,12 @@ const AdminProductsPage=props=>{
                 setEditProduct(null);
                 getPageData(PageData.page,PageData.pagesize)
             }
+        })
+    }
+    const deleteOneProductImage=index=>{
+        setProductImages(ProductImages=>{
+            ProductImages.splice(index,1);
+            return [...ProductImages]
         })
     }
     const saveProduct=()=>{
@@ -412,7 +418,13 @@ const AdminProductsPage=props=>{
                 <List>
                     {ProductImages.map((oneProductImage,index)=>{
                         return (
-                            <ListItem key={index}>
+                            <ListItem key={index} 
+                                secondaryAction={
+                                    <IconButton onClick={e=>deleteOneProductImage(index)} edge="end" >
+                                        <Delete/>
+                                    </IconButton>
+                                }
+                            >
                                 <ListItemAvatar>
                                     <Avatar src={window.URL.createObjectURL(oneProductImage)} variant="square" />
                                 </ListItemAvatar>
