@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MyDataTable from "../../components/datagrid/MyDataTable";
-import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
+import { Fab, Typography,Button,IconButton, Paper, MenuItem, Divider, FormControl, FormControlLabel,Checkbox, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText, CircularProgress } from "@mui/material";
 import axios from 'axios'
 import {BACKEND_URL} from '../../AppConfigs'
 import {DeleteOutlined,AddOutlined,CloudUploadOutlined,CancelOutlined, ImageOutlined, TableChartOutlined, DownloadOutlined, CheckOutlined, BlockOutlined, EditOutlined, Edit, Delete} from '@mui/icons-material'
@@ -29,6 +29,7 @@ const AdminProductsPage=props=>{
     const [ShowProduct,setShowProduct]=React.useState(null);
     const [EditProduct,setEditProduct]=React.useState(null);
     const [ProductImages,setProductImages]=React.useState([]);
+    const [Waiting,setWaiting]=React.useState(false);
     const snackbar=useSnackbar();
     const refTitle=React.useRef(null);
     const refDescription=React.useRef(null);
@@ -141,6 +142,7 @@ const AdminProductsPage=props=>{
         if(!refDescription.current.value) return snackbar.enqueueSnackbar("Input Description!",{variant:"error"});
         if(!refPrice.current.value) return snackbar.enqueueSnackbar("Input Price!",{variant:"error"})
         if(!ProductImage) return snackbar.enqueueSnackbar("Select Product Image!",{variant:"error"})
+        setWaiting(true);
         const myForm=new FormData();
         myForm.append('title',refTitle.current.value);
         myForm.append('description',refDescription.current.value);
@@ -165,6 +167,7 @@ const AdminProductsPage=props=>{
             }
         })
         .then(response=>{
+            setWaiting(false)
             if(response.data.status==="success"){
                 setNewProduct(false);
                 refTitle.current.value="";
@@ -202,6 +205,7 @@ const AdminProductsPage=props=>{
             console.log(response)
         })
     }
+
     const headers=[
         {
             title:"Product Image",
@@ -258,183 +262,194 @@ const AdminProductsPage=props=>{
             >
                 <DialogTitle>Product Detail Edit</DialogTitle>
                 <DialogContent>
-                <TextField
-                    autoFocus
-                    margin="normal"
-                    label="Product Name"
-                    fullWidth
-                    variant="outlined"
-                    inputRef={refTitle}
-                />
-                {AllCategories&&(
-                    <>
-                    <TextField
-                        margin="normal"
-                        label="Product Category"
-                        fullWidth
-                        select
-                        inputRef={refCategory_1}
-                        variant="outlined"
-                        defaultValue={""}
-                    >
-                        <MenuItem  value={""} >
-                            
-                        </MenuItem>
-                        {AllCategories&&AllCategories.map((oneCategory,index)=>{
-                            return (
-                                <MenuItem key={index} value={oneCategory._id} >
-                                    {oneCategory.title}
-                                </MenuItem>
-                            )
-                        })}
-                    </TextField>
-                    <TextField
-                        margin="normal"
-                        label="Product Category"
-                        fullWidth
-                        select
-                        inputRef={refCategory_2}
-                        variant="outlined"
-                        defaultValue={""}
-                    >
-                        <MenuItem  value={""} >
-                            
-                        </MenuItem>
-                        {AllCategories&&AllCategories.map((oneCategory,index)=>{
-                            return (
-                                <MenuItem key={index} value={oneCategory._id} >
-                                    {oneCategory.title}
-                                </MenuItem>
-                            )
-                        })}
-                    </TextField>
-                    <TextField
-                        margin="normal"
-                        label="Product Category"
-                        fullWidth
-                        select
-                        inputRef={refCategory_3}
-                        variant="outlined"
-                        defaultValue={""}
-                    >
-                        <MenuItem  value={""} >
-                            
-                        </MenuItem>
-                        {AllCategories&&AllCategories.map((oneCategory,index)=>{
-                            return (
-                                <MenuItem key={index} value={oneCategory._id} >
-                                    {oneCategory.title}
-                                </MenuItem>
-                            )
-                        })}
-                    </TextField>
-                    </>
-                )}
-                
-                <TextField
-                    label="Price"
-                    id="outlined-start-adornment"
-                    margin="normal"
-                    fullWidth
-                    type="number"
-                    inputRef={refPrice}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">USD $</InputAdornment>,
-                    }}
-                />
-                <TextField
-                    label="Length"
-                    id="outlined-start-adornment"
-                    margin="normal"
-                    fullWidth
-                    type="number"
-                    inputRef={refLength}
-                    defaultValue={10}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">in</InputAdornment>,
-                    }}
-                />
-                <TextField
-                    label="Width"
-                    id="outlined-start-adornment"
-                    margin="normal"
-                    fullWidth
-                    type="number"
-                    inputRef={refWidth}
-                    defaultValue={10}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">in</InputAdornment>,
-                    }}
-                />
-                <TextField
-                    label="Height"
-                    id="outlined-start-adornment"
-                    margin="normal"
-                    fullWidth
-                    type="number"
-                    inputRef={refHeight}
-                    defaultValue={10}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">in</InputAdornment>,
-                    }}
-                />
-                <TextField
-                    label="Weight"
-                    id="outlined-start-adornment"
-                    margin="normal"
-                    fullWidth
-                    type="number"
-                    inputRef={refWeight}
-                    defaultValue={2}
-                    InputProps={{
-                        startAdornment: <InputAdornment position="start">lb</InputAdornment>,
-                    }}
-                />
-                <FormControl>
-                    <FormControlLabel control={<Checkbox onChange={e=>console.log(refPublic.current.checked)} inputRef={refPublic} />} label={`Public`} />
-                </FormControl>
-                <TextField
-                    autoFocus
-                    margin="normal"
-                    label="Product Description"
-                    multiline
-                    inputRef={refDescription}
-                    rows={10}
-                    fullWidth
-                    variant="outlined"
-                />
-                
-                <Paper onClick={e=>refImage.current.click()} elevation={8}  sx={{padding:5,textAlign:"center"}} >
-                    {ProductImage?(
-                        <img style={{width:"80%"}} src={window.URL.createObjectURL(ProductImage)} />
+                    {Waiting==true?(
+                        <>
+                            <Grid container alignItems={"center"} justifyContent={"center"} >
+                                <CircularProgress/>
+                            </Grid>
+                        </>
                     ):(
                         <>
-                        <ImageOutlined style={{fontSize:"10vw",color:"gray"}} />
-                        <Typography component={`h5`} sx={{color:"gray"}} variant="h5" >Click to Upload Product Main Image</Typography>
+                            <TextField
+                                autoFocus
+                                margin="normal"
+                                label="Product Name"
+                                fullWidth
+                                variant="outlined"
+                                inputRef={refTitle}
+                            />
+                            {AllCategories&&(
+                                <>
+                                <TextField
+                                    margin="normal"
+                                    label="Product Category"
+                                    fullWidth
+                                    select
+                                    inputRef={refCategory_1}
+                                    variant="outlined"
+                                    defaultValue={""}
+                                >
+                                    <MenuItem  value={""} >
+                                        
+                                    </MenuItem>
+                                    {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                                        return (
+                                            <MenuItem key={index} value={oneCategory._id} >
+                                                {oneCategory.title}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </TextField>
+                                <TextField
+                                    margin="normal"
+                                    label="Product Category"
+                                    fullWidth
+                                    select
+                                    inputRef={refCategory_2}
+                                    variant="outlined"
+                                    defaultValue={""}
+                                >
+                                    <MenuItem  value={""} >
+                                        
+                                    </MenuItem>
+                                    {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                                        return (
+                                            <MenuItem key={index} value={oneCategory._id} >
+                                                {oneCategory.title}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </TextField>
+                                <TextField
+                                    margin="normal"
+                                    label="Product Category"
+                                    fullWidth
+                                    select
+                                    inputRef={refCategory_3}
+                                    variant="outlined"
+                                    defaultValue={""}
+                                >
+                                    <MenuItem  value={""} >
+                                        
+                                    </MenuItem>
+                                    {AllCategories&&AllCategories.map((oneCategory,index)=>{
+                                        return (
+                                            <MenuItem key={index} value={oneCategory._id} >
+                                                {oneCategory.title}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </TextField>
+                                </>
+                            )}
+                            
+                            <TextField
+                                label="Price"
+                                id="outlined-start-adornment"
+                                margin="normal"
+                                fullWidth
+                                type="number"
+                                inputRef={refPrice}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">USD $</InputAdornment>,
+                                }}
+                            />
+                            <TextField
+                                label="Length"
+                                id="outlined-start-adornment"
+                                margin="normal"
+                                fullWidth
+                                type="number"
+                                inputRef={refLength}
+                                defaultValue={10}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                                }}
+                            />
+                            <TextField
+                                label="Width"
+                                id="outlined-start-adornment"
+                                margin="normal"
+                                fullWidth
+                                type="number"
+                                inputRef={refWidth}
+                                defaultValue={10}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                                }}
+                            />
+                            <TextField
+                                label="Height"
+                                id="outlined-start-adornment"
+                                margin="normal"
+                                fullWidth
+                                type="number"
+                                inputRef={refHeight}
+                                defaultValue={10}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">in</InputAdornment>,
+                                }}
+                            />
+                            <TextField
+                                label="Weight"
+                                id="outlined-start-adornment"
+                                margin="normal"
+                                fullWidth
+                                type="number"
+                                inputRef={refWeight}
+                                defaultValue={2}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">lb</InputAdornment>,
+                                }}
+                            />
+                            <FormControl>
+                                <FormControlLabel control={<Checkbox onChange={e=>console.log(refPublic.current.checked)} inputRef={refPublic} />} label={`Public`} />
+                            </FormControl>
+                            <TextField
+                                autoFocus
+                                margin="normal"
+                                label="Product Description"
+                                multiline
+                                inputRef={refDescription}
+                                rows={10}
+                                fullWidth
+                                variant="outlined"
+                            />
+                            
+                            <Paper onClick={e=>refImage.current.click()} elevation={8}  sx={{padding:5,textAlign:"center"}} >
+                                {ProductImage?(
+                                    <img style={{width:"80%"}} src={window.URL.createObjectURL(ProductImage)} />
+                                ):(
+                                    <>
+                                    <ImageOutlined style={{fontSize:"10vw",color:"gray"}} />
+                                    <Typography component={`h5`} sx={{color:"gray"}} variant="h5" >Click to Upload Product Main Image</Typography>
+                                    </>
+                                )}
+                            </Paper>
+                            <Button onClick={e=>refProductImage.current.click()} variant="contained" fullWidth sx={{marginTop:3,marginBottom:1}} >Add Image</Button>
+                            <List>
+                                {ProductImages.map((oneProductImage,index)=>{
+                                    return (
+                                        <ListItem key={index} 
+                                            secondaryAction={
+                                                <IconButton onClick={e=>deleteOneProductImage(index)} edge="end" >
+                                                    <Delete/>
+                                                </IconButton>
+                                            }
+                                        >
+                                            <ListItemAvatar>
+                                                <Avatar src={window.URL.createObjectURL(oneProductImage)} variant="square" />
+                                            </ListItemAvatar>
+                                            <ListItemText primary={oneProductImage.name} secondary={`${(Number(oneProductImage.size)/1024).toFixed(2)} KB`} />
+                                        </ListItem>
+                                    )
+                                })}
+                            </List>
+                            <input hidden accept="image/*" onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
+                            <input hidden accept="image/*" onChange={e=>setProductImages(ProductImages=>[...ProductImages,e.target.files[0]])} type="file" ref={refProductImage} />
                         </>
                     )}
-                </Paper>
-                <Button onClick={e=>refProductImage.current.click()} variant="contained" fullWidth sx={{marginTop:3,marginBottom:1}} >Add Image</Button>
-                <List>
-                    {ProductImages.map((oneProductImage,index)=>{
-                        return (
-                            <ListItem key={index} 
-                                secondaryAction={
-                                    <IconButton onClick={e=>deleteOneProductImage(index)} edge="end" >
-                                        <Delete/>
-                                    </IconButton>
-                                }
-                            >
-                                <ListItemAvatar>
-                                    <Avatar src={window.URL.createObjectURL(oneProductImage)} variant="square" />
-                                </ListItemAvatar>
-                                <ListItemText primary={oneProductImage.name} secondary={`${(Number(oneProductImage.size)/1024).toFixed(2)} KB`} />
-                            </ListItem>
-                        )
-                    })}
-                </List>
-                <input hidden accept="image/*" onChange={e=>setProductImage(e.target.files[0])} type="file" ref={refImage} />
-                <input hidden accept="image/*" onChange={e=>setProductImages(ProductImages=>[...ProductImages,e.target.files[0]])} type="file" ref={refProductImage} />
+                    
                 </DialogContent>
                 <DialogActions>
                 <Button variant="outlined" onClick={e=>setNewProduct(false)}>Cancel</Button>
@@ -453,6 +468,7 @@ const AdminProductsPage=props=>{
                     <DialogContent>
                         <Typography align="center" variant="h4" component={`h4`} >{ShowProduct.title}</Typography>
                         <div style={{display:"flex",justifyContent:"center"}} ><img style={{width:"40%"}} src={ShowProduct.image_url?ShowProduct.image_url:`${BACKEND_URL}/shop/products/${ShowProduct._id}/image`} /></div>
+                        <RenderProductImages product_id={ShowProduct._id} />
                         <Divider/>
                         <Grid container alignItems={`center`} justifyContent={`center`} >
                             <Grid item xs={8}>
@@ -665,6 +681,7 @@ const AdminProductsPage=props=>{
                             variant="outlined"
                             name="description"
                         />
+                        <RenderListProductImages product_id={EditProduct._id} />
                         </>
                     )}
                 </DialogContent>
@@ -676,6 +693,91 @@ const AdminProductsPage=props=>{
             </Dialog>
             <Confirm open={DeleteProduct?true:false} onOk={()=>{deleteProduct(DeleteProduct)}} onCancel={e=>setDeleteProduct(null)} />
             <Confirm open={DeleteAll} />
+        </>
+    )
+}
+const RenderProductImages=({product_id})=>{
+    const [ProductImages,setProductImages]=React.useState([]);
+    useEffect(()=>{
+        axios.get(`${BACKEND_URL}/shop/products/${product_id}/images`)
+        .then(response=>{
+            if(response.data.status=="success")
+                setProductImages([...response.data.data])
+        })
+    },[])
+    return (
+        <Grid container alignItems={"center"} justifyContent={"center"} sx={{marginTop:2,marginBottom:2}} spacing={2}>
+            {ProductImages.map((oneImage,index)=>{
+                return (
+                    <Grid item xs={2} key={index} sx={{margin:1}} >
+                        <img style={{width:"90%",height:"auto"}} src={`${BACKEND_URL}/shop/products/images/${oneImage._id}`} />
+                    </Grid>
+                )
+            })}
+        </Grid>
+    )
+}
+const RenderListProductImages=({product_id})=>{
+    const [ProductImages,setProductImages]=React.useState([]);
+    const refProductImage=React.useRef(null)
+    useEffect(()=>{
+        axios.get(`${BACKEND_URL}/shop/products/${product_id}/images`)
+        .then(response=>{
+            if(response.data.status=="success")
+                setProductImages([...response.data.data])
+        })
+    },[])
+    const deleteImage=(index)=>{
+        axios.delete(`${BACKEND_URL}/shop/products/images/${ProductImages[index]._id}`)
+        .then(response=>{
+            if(response.data.status=="success"){
+                setProductImages(ProductImages=>{
+                    ProductImages.splice(index,1);
+                    return [...ProductImages]
+                })
+            }
+        })
+    }
+    const addImage=(image)=>{
+        const myForm=new FormData();
+        myForm.append("product",product_id);
+        myForm.append("image",image);
+        axios.post(`${BACKEND_URL}/shop/products/images`,myForm)
+        .then(response=>{
+            if(response.data.status=="success"){
+                axios.get(`${BACKEND_URL}/shop/products/${product_id}/images`)
+                .then(response=>{
+                    if(response.data.status=="success")
+                        setProductImages([...response.data.data])
+                })
+            }
+        })
+    }
+    return (
+        <>
+        <Button variant="contained" onClick={e=>refProductImage.current.click()} color="primary" sx={{marginTop:1,marginBottom:1}} fullWidth >Add Image</Button>
+        <List>
+            {ProductImages.map((oneImage,index)=>{
+                return (
+                    
+                    <ListItem
+                        secondaryAction={
+                            <IconButton onClick={e=>deleteImage(index)} >
+                                <Delete/>
+                            </IconButton>
+                        }
+                    >
+                        <ListItemAvatar>
+                            <Avatar variant="square" src={`${BACKEND_URL}/shop/products/images/${oneImage._id}`} />
+                        </ListItemAvatar>
+                        <ListItemText
+                        primary={`Image ${index+1}`}
+                        />
+                    </ListItem>
+                )
+            })}
+        </List>
+        <input hidden accept="image/*" onChange={e=>addImage(e.target.files[0])} type="file" ref={refProductImage} />
         </>
     )
 }
